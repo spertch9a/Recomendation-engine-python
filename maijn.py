@@ -143,13 +143,13 @@ pair_counts_sorted[pair_counts_sorted['movie_a'] == 'Toy Story (1995)']
 
 
 # Calculate how often each item in movies_a occurs with the items in movies_b
-combination_counts = movie_combinations.groupby(['movie_a', 'movie_b']).size()
+combination_counts = movie_pairs.groupby(['movie_a', 'movie_b']).size()
 
 # Inspect the results
 print(combination_counts.head())
 
 # Calculate how often each item in movie_a occurs with the items in movie_b
-combination_counts = movie_combinations.groupby(['movie_a', 'movie_b']).size()
+combination_counts = movie_pairs.groupby(['movie_a', 'movie_b']).size()
 
 # Convert the results to a DataFrame and reset the index
 combination_counts_df = combination_counts.to_frame(name='size').reset_index()
