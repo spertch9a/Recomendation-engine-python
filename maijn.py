@@ -49,3 +49,20 @@ frequent_movies_df = userrating_df[userrating_df["title"].isin(
 frequent_movies_avgs = frequently_reviewed_movies[[
     "title", "rating"]].groupby("title").mean()
 print(frequent_movies_avgs.sort_values(by="rating", ascending=False).head())
+
+
+# Get the counts of occurrences of each movie title
+movie_popularity = userrating_df["title"].value_counts()
+
+# Inspect the most common values
+print(movie_popularity.head().index)
+
+# Find the mean of the ratings given to each title
+average_rating_df = userrating_df[["title", "rating"]].groupby('title').mean()
+
+# Order the entries by highest average rating to lowest
+sorted_average_ratings = average_rating_df.sort_values(
+    by="rating", ascending=False)
+
+# Inspect the top movies
+print(sorted_average_ratings.head())
