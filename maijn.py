@@ -38,17 +38,17 @@ movie_frequency = userrating_df["title"].value_counts()
 print(movie_frequency)
 
 # we'll take the indexes of the frequently reviewed movies
+print("frequently reviewed movies: ")
 frequently_reviewed_movies = movie_frequency[movie_frequency > 100].index
 print(frequently_reviewed_movies)
 
 # taking a subset of the movies that are frequent, using the isin function
-frequent_movies_df = userrating_df[userrating_df["title"].isin(
-    frequently_reviewed_movies)]
+frequent_movies_df = userrating_df[userrating_df["title"].isin(frequently_reviewed_movies)]
 
 # this subset will be used to show the highest books ratings on average
-frequent_movies_avgs = frequently_reviewed_movies[[
-    "title", "rating"]].groupby("title").mean()
-print(frequent_movies_avgs.sort_values(by="rating", ascending=False).head())
+print("subsetting")
+#frequent_movies_avgs = frequently_reviewed_movies[["title", "rating"]].groupby('title').mean()
+#print(frequent_movies_avgs.sort_values(by="rating", ascending=False).head())
 
 
 # Get the counts of occurrences of each movie title
@@ -66,3 +66,64 @@ sorted_average_ratings = average_rating_df.sort_values(
 
 # Inspect the top movies
 print(sorted_average_ratings.head())
+
+
+#combining popularity and reviews 
+# Create a list of only movies appearing > 50 times in the dataset
+movie_popularity = userrating_df["title"].value_counts()
+popular_movies = movie_popularity[movie_popularity > 50].index
+
+print(popular_movies)
+
+#filtering the original userratings_df by the popular movies list to creat a dataframe
+# Create a list of only movies appearing > 50 times in the dataset
+movie_popularity = userrating_df["title"].value_counts()
+popular_movies = movie_popularity[movie_popularity > 50].index
+
+# Use this popular_movies list to filter the original DataFrame
+popular_movies_rankings = userrating_df[userrating_df["title"].isin(popular_movies)]
+
+# Inspect the movies watched over 50 times
+print(popular_movies_rankings)
+
+
+#combining popularity and reviews 
+# Create a list of only movies appearing > 50 times in the dataset
+movie_popularity = userrating_df["title"].value_counts()
+popular_movies = movie_popularity[movie_popularity > 50].index
+
+# Use this popular_movies list to filter the original DataFrame
+popular_movies_rankings =  userrating_df[userrating_df["title"].isin(popular_movies)]
+
+# Find the average rating given to these frequently watched films
+popular_movies_average_rankings = popular_movies_rankings[["title", "rating"]].groupby('title').head()
+print(popular_movies_average_rankings.sort_values(by="rating", ascending=False).head())
+
+
+#making sugestion by finding the similar
+#i mean movies watched by the same person
+
+
+#in this section  we'll study this part 
+#for example we'll find the most common pairs and we'll sort them
+print("FIDNING PAIRS")
+
+from itertools import permutations
+
+#defining the function that'll make the pairs for us, commenting the function after it 
+
+def create_pairs(x):
+    pairs = pd.DataFrame(list(permutations(x.values, 2)), columns=['movie_a', 'movie_b'] )
+
+    return pairs
+    
+"""
+permutations(list, length_of_permutations) generates iterable object containing all permutations
+list() converts this object to a usable list
+pd.dataFrame() converts the list to a DataFrame containing the columns movie_a and movie_b
+"""
+
+#applying the function the data
+movie_pairs = userrating_df.groupby("userId")['title'].apply(create_pairs)
+print(movie_pairs.head())
+
