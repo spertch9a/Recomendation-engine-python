@@ -116,7 +116,7 @@ def create_pairs(x):
     pairs = pd.DataFrame(list(permutations(x.values, 2)), columns=['movie_a', 'movie_b'] )
 
     return pairs
-    
+
 """
 permutations(list, length_of_permutations) generates iterable object containing all permutations
 list() converts this object to a usable list
@@ -125,5 +125,47 @@ pd.dataFrame() converts the list to a DataFrame containing the columns movie_a a
 
 #applying the function the data
 movie_pairs = userrating_df.groupby("userId")['title'].apply(create_pairs)
+#cleaning up the results
+movie_pairs = movie_pairs.reset_index(drop = True)
 print(movie_pairs.head())
 
+# counting the pairings
+pair_counts = movie_pairs.groupby(['movie_a', 'movie_b']).size()
+pair_counts_df = pair_counts.to_frame(name= 'size').reset_index()
+print("PAIR COUNTS DF")
+print(pair_counts_df.head())
+
+#loking up recomendataions
+pair_counts_sorted = pair_counts_df.sort_values('size', ascending = False)
+
+pair_counts_sorted[pair_counts_sorted['movie_a'] == 'Toy Story (1995)']
+
+
+
+# Calculate how often each item in movies_a occurs with the items in movies_b
+combination_counts = movie_combinations.groupby(['movie_a', 'movie_b']).size()
+
+# Inspect the results
+print(combination_counts.head())
+
+# Calculate how often each item in movie_a occurs with the items in movie_b
+combination_counts = movie_combinations.groupby(['movie_a', 'movie_b']).size()
+
+# Convert the results to a DataFrame and reset the index
+combination_counts_df = combination_counts.to_frame(name='size').reset_index()
+print(combination_counts_df.head())
+
+
+
+#making the first movie recomendations 
+
+
+# Sort the counts from highest to lowest
+combination_counts_df.sort_values('size', ascending=False, inplace=True)
+
+# Find the movies most frequently watched by people who watched Thor
+thor_df = combination_counts_df[combination_counts_df['movie_a'] == 'Thor (2011)']
+
+# Plot the results
+thor_df.plot.bar(x="movie_b")
+plt.show()
