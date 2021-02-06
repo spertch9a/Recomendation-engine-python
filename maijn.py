@@ -17,8 +17,9 @@ print(userrating_df[['rating']].nunique())
 
 # Display a histogram of the values in the Rating column
 userrating_df['rating'].hist()
+plt.title("Historam of the values in the ratin column")
 # activate this to show the plot
-# plt.show()
+plt.show()
 
 # Finding the most liked items
 print("Average rating for each movie")
@@ -33,12 +34,14 @@ print(sorted_avg_rating_df.head())
 # now we note that some movies have been sorted at first and they're not know,
 # a movie with one good review has a solid chance to be sorted as one of the best movies
 
-# calculating the book frequency
+# calculating the movie frequency
+
+print("CALCULATIN MOVIE FREQUENCY")
 movie_frequency = userrating_df["title"].value_counts()
 print(movie_frequency)
 
 # we'll take the indexes of the frequently reviewed movies
-print("frequently reviewed movies: ")
+print("FREQUENTLY REVIEWED MOVIES: ")
 frequently_reviewed_movies = movie_frequency[movie_frequency > 100].index
 print(frequently_reviewed_movies)
 
@@ -46,9 +49,10 @@ print(frequently_reviewed_movies)
 frequent_movies_df = userrating_df[userrating_df["title"].isin(frequently_reviewed_movies)]
 
 # this subset will be used to show the highest books ratings on average
-print("subsetting")
-#frequent_movies_avgs = frequently_reviewed_movies[["title", "rating"]].groupby('title').mean()
-#print(frequent_movies_avgs.sort_values(by="rating", ascending=False).head())
+print("SUBSETTING...")
+#kont dayer frequently_reviewed_movies[["title", "rating"]]
+frequent_movies_avgs = frequently_reviewed_movies[[4, 2]].groupby('title').mean()
+print(frequent_movies_avgs.sort_values(by="rating", ascending=False).head())
 
 
 # Get the counts of occurrences of each movie title
@@ -164,9 +168,9 @@ print(combination_counts_df.head())
 combination_counts_df.sort_values('size', ascending=False, inplace=True)
 
 # Find the movies most frequently watched by people who watched Thor
-thor_df = combination_counts_df[combination_counts_df['movie_a'] == 'Thor (2011)']
+thor_df = combination_counts_df[combination_counts_df['movie_a'] == 'Toy Story (1995)']
 
 # Plot the results
-print(thor_df.head())
+print("BEST MATCHES", thor_df.head())
 thor_df.head().plot.bar(x="movie_b")
 plt.show()
