@@ -167,5 +167,6 @@ combination_counts_df.sort_values('size', ascending=False, inplace=True)
 thor_df = combination_counts_df[combination_counts_df['movie_a'] == 'Thor (2011)']
 
 # Plot the results
-thor_df.plot.bar(x="movie_b")
+print(thor_df.head())
+thor_df.head().plot.bar(x="movie_b")
 plt.show()
